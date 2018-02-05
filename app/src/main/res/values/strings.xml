@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">meme</string>
+    <string name="prompt_email">Email</string>
+</resources>
