@@ -1,5 +1,6 @@
 package com.cs316.meme;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -65,11 +66,32 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = mEmail.getText().toString();
                 String pass = mPassword.getText().toString();
-                if(!email.equals("") && !pass.equals("")){
-                    mAuth.signInWithEmailAndPassword(email,pass);
-                }else{
-                    toastMessage("You didn't fill in all the fields.");
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                if(user == null){
+                    mAuth.signInWithEmailAndPassword(email, pass)
+                            .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "signInWithEmail:success");
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                        toastMessage("Auth failed");
+                                    }
+
+                                    // ...
+                                }
+                            });
                 }
+                else{
+                    toastMessage("User already signed in!");
+                }
+
+
             }
         });
 
@@ -78,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mAuth.signOut();
                 toastMessage("Signing Out...");
+            }
+        });
+        btnAddItems.setOnClickListener(new View.OnClickListener(){
+            @Override
+                    public void onClick(View view){
+                        Intent intent = new Intent(MainActivity.this, AddToDatabase.class);
+                        startActivity(intent);
             }
         });
 
