@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -178,9 +179,26 @@ public class AddToDatabase extends AppCompatActivity{
     private void addFilePaths(){
         Log.d(TAG, "addFilePaths: Adding file paths.");
         //String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
-        String path = "/storage/emulated/0/DCIM/Camera/IMG_20180208_054917.jpg";
-        pathArray.add(path+"");
-        pathArray.add("/storage/emulated/0/DCIM/Restored/KH.jpg");
+        //String path = "/storage/emulated/0/DCIM/Camera/IMG_20180208_054917.jpg";
+
+        String path = "/storage/emulated/0/DCIM/Camera";
+        File file = new File(path,"");
+        File[] listFile;
+
+        if (file.isDirectory())
+        {
+            listFile = file.listFiles();
+
+
+            for (int i = 0; i < listFile.length; i++)
+            {
+
+                pathArray.add(listFile[i].getAbsolutePath());
+
+            }
+        }
+        //pathArray.add(path+"");
+        //pathArray.add("/storage/emulated/0/DCIM/Restored/KH.jpg");
         loadImageFromStorage();
     }
 
