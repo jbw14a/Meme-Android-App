@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mEmail, mPassword;
-    private Button btnSignIn,btnSignOut,btnAddItems;
+    private Button btnSignIn, btnSignOut, btnAddItems, btnViewMemes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignIn = (Button) findViewById(R.id.email_sign_in_button);
         btnSignOut = (Button) findViewById(R.id.email_sign_out_button);
         btnAddItems = (Button) findViewById(R.id.add_item_screen);
+        btnViewMemes = (Button) findViewById(R.id.view_memes);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 String pass = mPassword.getText().toString();
                 FirebaseUser user = mAuth.getCurrentUser();
 
-                if(user == null){
+                if (user == null) {
                     mAuth.signInWithEmailAndPassword(email, pass)
                             .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -86,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                     // ...
                                 }
                             });
-                }
-                else{
+                } else {
                     toastMessage("User already signed in!");
                 }
 
@@ -102,16 +102,24 @@ public class MainActivity extends AppCompatActivity {
                 toastMessage("Signing Out...");
             }
         });
-        btnAddItems.setOnClickListener(new View.OnClickListener(){
+        btnAddItems.setOnClickListener(new View.OnClickListener() {
             @Override
-                    public void onClick(View view){
-                        Intent intent = new Intent(MainActivity.this, AddToDatabase.class);
-                        startActivity(intent);
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddToDatabase.class);
+                startActivity(intent);
+            }
+        });
+
+        btnViewMemes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ViewMemes.class);
+                startActivity(intent);
             }
         });
 
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
             String name = user.getDisplayName();
@@ -143,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void toastMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    private void toastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }

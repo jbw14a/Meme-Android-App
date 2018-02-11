@@ -68,6 +68,17 @@
                 android:text="Add Items to Database"
                 android:textStyle="bold"/>
 
+            <Button
+                android:id="@+id/view_memes"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="View Memes"
+                android:textStyle="bold"/>
+
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

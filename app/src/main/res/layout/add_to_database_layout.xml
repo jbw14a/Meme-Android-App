@@ -13,29 +13,33 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
         android:id="@+id/btnUploadImage"/>
-    
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnUploadImage"
         android:layout_centerHorizontal="true">
 
+
         <Button
-            android:text="Back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/btnBackImage"/>
-        <Button
-            android:text="Next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginLeft="5dp"
             android:id="@+id/btnNextImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="13dp"
             android:layout_toRightOf="@id/btnBackImage"
-            />
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/btnBackImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="13dp"
+            android:text="Back" />
+
+
+
 
     </RelativeLayout>
 
@@ -51,5 +55,16 @@
         android:layout_below="@id/uploadImage"
         android:id="@+id/imageName"
         android:hint="Enter image name"/>
+
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="13dp"
+        android:onClick="takePhoto"
+        android:text="Take Photo" />
+
+
 
 </RelativeLayout>
