@@ -2,7 +2,9 @@ package com.cs316.meme;
 
 import android.*;
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -66,6 +69,9 @@ public class AddToDatabase extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
+
+    private static final int CAMERA_REQUEST = 123;
+    private Bitmap photo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -210,6 +216,34 @@ public class AddToDatabase extends AppCompatActivity{
         else{
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
+    }
+
+    public void takePhoto(View v){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_REQUEST);
+    }
+
+    public void clear(View v){
+        image.setImageBitmap(null);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK){
+            photo = (Bitmap) data.getExtras().get("data");
+            String saveImageURL = MediaStore.Images.Media.insertImage(
+                    getContentResolver(),
+                    photo,
+                    "New Photo",
+                    "New Image"
+
+            );
+
+            Uri savedImageURI = Uri.parse(saveImageURL);
+            image.setImageURI(savedImageURI);
+
+        }
+
     }
 
 
