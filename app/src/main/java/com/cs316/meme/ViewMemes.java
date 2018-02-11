@@ -27,7 +27,7 @@ public class ViewMemes extends AppCompatActivity {
     private void initImageBitmaps(){
         Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
 
-        mImageUrls.add("https://c1.staticflickr.com/5/4636/25316407448_de5fbf183d_o.jpg");
+        mImageUrls.add("https://meme-71fa4.appspot.com/images/users/IbTdzcPYGHVWNeYiIOtTef1SFOF3/CheckerboardPicture.jpg");
         mNames.add("Havasu Falls");
 
         mImageUrls.add("https://i.redd.it/tpsnoz5bzo501.jpg");

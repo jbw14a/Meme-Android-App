@@ -22,8 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddToDatabase" />
-        <activity android:name=".ViewMemes"></activity>
-        <activity android:name=".GalleryItem"/>
+        <activity android:name=".ViewMemes" />
+        <activity android:name=".GalleryItem" />
+        <activity android:name=".TakePhoto"></activity>
     </application>
 
 </manifest>

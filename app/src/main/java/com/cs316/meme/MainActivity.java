@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     // UI references.
     private EditText mEmail, mPassword;
-    private Button btnSignIn, btnSignOut, btnAddItems, btnViewMemes;
+    private Button btnSignIn, btnSignOut, btnAddItems, btnTakePhoto,btnViewMemes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignIn = (Button) findViewById(R.id.email_sign_in_button);
         btnSignOut = (Button) findViewById(R.id.email_sign_out_button);
         btnAddItems = (Button) findViewById(R.id.add_item_screen);
+        btnTakePhoto = (Button) findViewById(R.id.take_photo);
         btnViewMemes = (Button) findViewById(R.id.view_memes);
 
         mAuth = FirebaseAuth.getInstance();
@@ -106,6 +107,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddToDatabase.class);
+                startActivity(intent);
+            }
+        });
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, TakePhoto.class);
                 startActivity(intent);
             }
         });
