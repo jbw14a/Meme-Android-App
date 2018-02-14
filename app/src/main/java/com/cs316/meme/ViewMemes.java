@@ -20,7 +20,7 @@ public class ViewMemes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_memes);
         Log.d(TAG, "onCreate: started.");
-
+//
         initImageBitmaps();
     }
 
