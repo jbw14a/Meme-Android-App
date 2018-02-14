@@ -164,6 +164,7 @@ public class AddToDatabase extends AppCompatActivity{
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             toastMessage("Upload Success");
                             mProgressDialog.dismiss();
+                            addURL();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -172,12 +173,29 @@ public class AddToDatabase extends AppCompatActivity{
                             mProgressDialog.dismiss();
                         }
                     });
+
+
                 }
 
             }
         });
     }
+    private void addURL(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        final String userID = user.getUid();
+        final String name = imageName.getText().toString();
 
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/" + name + ".jpg");
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String downloadURL = uri.toString();
+                Log.d(TAG,uri.toString());
+                myRef.child(userID).child("ImageURL").child(name).setValue(downloadURL);
+            }
+        });
+
+    }
     private void addFilePaths(){
         Log.d(TAG, "addFilePaths: Adding file paths.");
 
