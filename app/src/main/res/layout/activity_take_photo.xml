@@ -8,7 +8,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/takePhotoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Take Photo"
@@ -19,25 +19,25 @@
 
 
     <ImageView
+        android:id="@+id/uploadImage"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/uploadImage"
         android:src="@mipmap/ic_launcher"/>
 
     <EditText
+        android:id = "@+id/imageName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/uploadImage"
-        android:id = "@+id/imageName"
         android:hint="Enter image name" />
     <Button
+        android:id="@+id/uploadImageBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="13dp"
         android:layout_centerHorizontal="true"
-        android:text="Upload"
-        android:id="@+id/btnUploadImage"/>
+        android:text="Upload" />
 </RelativeLayout>
