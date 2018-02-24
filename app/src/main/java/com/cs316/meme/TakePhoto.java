@@ -20,34 +20,34 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
 
 public class TakePhoto extends AppCompatActivity {
 
+
     private static final String TAG = "TakePhoto";
-
-
-    private ImageView image;
     private static final int CAMERA_REQUEST = 123;
-    private Bitmap photo;
-    private Button btnUpload;
+    private ImageView image;
+    private Button takePhotoBtn, uploadBtn;
     private EditText imageName;
 
-    private ArrayList<String> pathArray;
+
+    private Bitmap photo;
+    private Uri savedImageURI;
 
     private StorageReference mStorageRef;
 
+    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    private DatabaseReference myRef;
     private ProgressDialog mProgressDialog;
-
-    private int array_position = 0;
 
 
     @Override
@@ -55,37 +55,59 @@ public class TakePhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
         image = (ImageView) findViewById(R.id.uploadImage);
+        takePhotoBtn = (Button) findViewById(R.id.takePhotoBtn);
+        uploadBtn = (Button) findViewById(R.id.uploadImageBtn);
         imageName = (EditText) findViewById(R.id.imageName);
-        btnUpload = (Button) findViewById(R.id.btnUploadImage);
+
+        // Setup firebase variables
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
         mProgressDialog = new ProgressDialog(TakePhoto.this);
-        pathArray = new ArrayList<>();
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    toastMessage("Successfully signed in with: " + user.getEmail());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    toastMessage("Successfully signed out.");
+                }
+                // ...
+            }
+        };
 
-
-
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        // Sned photo to firebase
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verify and get current user
                 Log.d(TAG, "onClick: Uploading Image.");
-//                mProgressDialog.setMessage("Uploading Image...");
-//                mProgressDialog.show();
-
-                String name = imageName.getText().toString();
+                mProgressDialog.setMessage("Uploading Image...");
+                mProgressDialog.show();
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String userID = user.getUid();
 
-                if (!name.equals("")) {
-                    Log.d(TAG, "Proceeding...");
-                    Uri uri = Uri.fromFile(new File(pathArray.get(array_position)));
+
+                // Get the name of the photo
+                String name = imageName.getText().toString();
+
+                if(!name.equals("")){
+                    // The following two lines are what put the photo into firebase
                     StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/" + name + ".jpg");
-                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    storageReference.putFile(savedImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             toastMessage("Upload Success");
                             mProgressDialog.dismiss();
-
+                            addURL();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -100,7 +122,10 @@ public class TakePhoto extends AppCompatActivity {
 
             }
         });
+
     }
+
+    // ------ This is used to pull up the phone's camera --------
     public void takePhoto(View v){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA_REQUEST);
@@ -122,11 +147,33 @@ public class TakePhoto extends AppCompatActivity {
 
             );
 
-            Uri savedImageURI = Uri.parse(saveImageURL);
+            savedImageURI = Uri.parse(saveImageURL);
             image.setImageURI(savedImageURI);
+
         }
 
     }
+
+    // ---------------------------------------------------------------
+
+    // Used above to send photo to Firebase storage. Repeats alot of the same code except for: myRef.child().child().child().setValue();
+    private void addURL(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        final String userID = user.getUid();
+        final String name = imageName.getText().toString();
+
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/" + name + ".jpg");
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String downloadURL = uri.toString();
+                Log.d(TAG,uri.toString());
+                myRef.child(userID).child("ImageURL").child(name).setValue(downloadURL);
+            }
+        });
+
+    }
+
     private void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
