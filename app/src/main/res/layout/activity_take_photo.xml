@@ -17,15 +17,46 @@
         android:onClick="takePhoto"
         android:text="Take Photo" />
 
-
-    <ImageView
-        android:id="@+id/uploadImage"
+    <RelativeLayout
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_below="@+id/TopText"
+        android:id="@+id/RelativeLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_below="@+id/TopText">
+
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:src="@mipmap/ic_launcher" />
+        <TextView
+            android:id="@+id/TopTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:layout_alignTop="@+id/uploadImage"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/impactfont"
+            android:text="Top"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/BottomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/uploadImage"
+            android:fontFamily="@font/impactfont"
+            android:text="Bottom"
+            android:textSize="24sp" />
+    </RelativeLayout>
+
+
+
 
     <EditText
         android:id="@+id/imageName"
@@ -48,8 +79,8 @@
         android:id="@+id/TopText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/uploadImage"
-        android:layout_alignStart="@+id/uploadImage"
+        android:layout_alignLeft="@+id/RelativeLayout"
+        android:layout_alignStart="@+id/RelativeLayout"
         android:layout_below="@+id/takePhotoBtn"
         android:layout_marginTop="13dp"
         android:ems="10"
@@ -62,8 +93,11 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/TopText"
         android:layout_alignRight="@+id/TopText"
-        android:layout_below="@id/uploadImage"
+        android:layout_below="@id/RelativeLayout"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Bottom Text" />
+
+
 </RelativeLayout>

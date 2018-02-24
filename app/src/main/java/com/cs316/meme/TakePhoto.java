@@ -4,16 +4,21 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 
 public class TakePhoto extends AppCompatActivity {
@@ -35,7 +42,9 @@ public class TakePhoto extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 123;
     private ImageView image;
     private Button takePhotoBtn, uploadBtn;
-    private EditText imageName;
+    private EditText imageName, TopText, BottomText;
+    private TextView TopTextView, BottomTextView;
+    private RelativeLayout RLayout;
 
 
     private Bitmap photo;
@@ -58,6 +67,11 @@ public class TakePhoto extends AppCompatActivity {
         takePhotoBtn = (Button) findViewById(R.id.takePhotoBtn);
         uploadBtn = (Button) findViewById(R.id.uploadImageBtn);
         imageName = (EditText) findViewById(R.id.imageName);
+        TopText = (EditText) findViewById(R.id.TopText);
+        BottomText = (EditText) findViewById(R.id.BottomText);
+        TopTextView = (TextView) findViewById(R.id.TopTextView);
+        BottomTextView = (TextView) findViewById(R.id.BottomTextView);
+        RLayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
 
         // Setup firebase variables
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -92,6 +106,20 @@ public class TakePhoto extends AppCompatActivity {
                 mProgressDialog.setMessage("Uploading Image...");
                 mProgressDialog.show();
 
+                Bitmap viewBmp = Bitmap.createBitmap(RLayout.getWidth(), RLayout.getHeight(), Bitmap.Config.ARGB_8888);
+                viewBmp.setDensity(RLayout.getResources().getDisplayMetrics().densityDpi);
+                Canvas canvas = new Canvas(viewBmp);
+                RLayout.draw(canvas);
+                String ImageURL = MediaStore.Images.Media.insertImage(
+                        getContentResolver(),
+                        viewBmp,
+                        "New Photo",
+                        "New Image"
+
+                );
+                savedImageURI = Uri.parse(ImageURL);
+                image.setImageURI(savedImageURI);
+
                 FirebaseUser user = mAuth.getCurrentUser();
                 String userID = user.getUid();
 
@@ -120,6 +148,39 @@ public class TakePhoto extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        TopText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                TopTextView.setText(TopText.getText());
+            }
+        });
+        BottomText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                BottomTextView.setText(BottomText.getText());
             }
         });
 
