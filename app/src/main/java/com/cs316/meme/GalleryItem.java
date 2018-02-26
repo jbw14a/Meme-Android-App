@@ -39,6 +39,7 @@ public class GalleryItem extends AppCompatActivity {
     private String imageName;
     private ShareDialog shareDialog;
     private CallbackManager callbackManager;
+    private ShareButton fbButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class GalleryItem extends AppCompatActivity {
         }
 
         final Uri imageUri = Uri.parse(imageUrl);
-        ShareButton fbButton = (ShareButton) findViewById(R.id.facebookButton);
+        fbButton = (ShareButton) findViewById(R.id.facebookButton);
 
         SharePhoto photo = new SharePhoto.Builder()
                 .setImageUrl(imageUri)
@@ -76,15 +77,19 @@ public class GalleryItem extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
+        
 
-        if(ShareDialog.canShow(ShareLinkContent.class)){
-            ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentUrl(imageUri)
-                    .build();
-            shareDialog.show(linkContent);
-        }
-
-
+        fbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ShareDialog.canShow(ShareLinkContent.class)){
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(imageUri)
+                            .build();
+                    shareDialog.show(linkContent);
+                }
+            }
+        });
 
 
     }
@@ -93,6 +98,7 @@ public class GalleryItem extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
 
 
 }
