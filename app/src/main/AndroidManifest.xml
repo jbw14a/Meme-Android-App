@@ -34,7 +34,6 @@
         <activity android:name=".ViewMemes" />
         <activity android:name=".GalleryItem" />
         <activity android:name=".TakePhoto" />
-        <activity android:name=".FacebookActivity"></activity>
     </application>
 
 </manifest>
