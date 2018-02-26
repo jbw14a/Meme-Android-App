@@ -24,4 +24,10 @@
         android:textColor="#000"
         />
 
+    <com.facebook.share.widget.ShareButton
+        android:id="@+id/facebookButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
+
 </LinearLayout>

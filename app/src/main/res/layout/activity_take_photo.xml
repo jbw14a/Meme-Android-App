@@ -39,7 +39,7 @@
             android:paddingTop="15dp"
             android:layout_alignTop="@+id/uploadImage"
             android:layout_centerHorizontal="true"
-            android:fontFamily="@font/impactfont"
+            android:fontFamily="@font/impact"
             android:text="Top"
             android:textSize="24sp" />
 
@@ -50,7 +50,7 @@
             android:paddingBottom="15dp"
             android:layout_centerHorizontal="true"
             android:layout_alignBottom="@+id/uploadImage"
-            android:fontFamily="@font/impactfont"
+            android:fontFamily="@font/impact"
             android:text="Bottom"
             android:textSize="24sp" />
     </RelativeLayout>

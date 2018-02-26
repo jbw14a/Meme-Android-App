@@ -106,6 +106,7 @@ public class TakePhoto extends AppCompatActivity {
                 mProgressDialog.setMessage("Uploading Image...");
                 mProgressDialog.show();
 
+//----------------------------------------------------------
                 Bitmap viewBmp = Bitmap.createBitmap(RLayout.getWidth(), RLayout.getHeight(), Bitmap.Config.ARGB_8888);
                 viewBmp.setDensity(RLayout.getResources().getDisplayMetrics().densityDpi);
                 Canvas canvas = new Canvas(viewBmp);
@@ -119,6 +120,7 @@ public class TakePhoto extends AppCompatActivity {
                 );
                 savedImageURI = Uri.parse(ImageURL);
                 image.setImageURI(savedImageURI);
+//----------------------------------------------------------
 
                 FirebaseUser user = mAuth.getCurrentUser();
                 String userID = user.getUid();
