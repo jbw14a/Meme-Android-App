@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +80,8 @@ public class TakePhoto extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         mProgressDialog = new ProgressDialog(TakePhoto.this);
+
+        checkFilePermissions();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -235,6 +238,20 @@ public class TakePhoto extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkFilePermissions(){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+            int permissionCheck = TakePhoto.this.checkSelfPermission("Manifest.permission.READ_EXTERNAL_STORAGE");
+            permissionCheck += TakePhoto.this.checkSelfPermission("Manifest.permission.WRITE_EXTERNAL_STORAGE");
+            if(permissionCheck != 0) {
+                this.requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
+
+        }
+        else{
+            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
+        }
     }
 
     private void toastMessage(String message){
