@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +37,8 @@ public class GalleryItem extends AppCompatActivity {
     private static final String TAG = "GalleryActivity";
     private String imageUrl;
     private String imageName;
+    private ShareDialog shareDialog;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,8 +74,24 @@ public class GalleryItem extends AppCompatActivity {
 
         fbButton.setShareContent(content);
 
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+
+        if(ShareDialog.canShow(ShareLinkContent.class)){
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(imageUri)
+                    .build();
+            shareDialog.show(linkContent);
+        }
 
 
+
+
+    }
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 
