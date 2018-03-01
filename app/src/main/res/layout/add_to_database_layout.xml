@@ -5,124 +5,117 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnNextImage"
+    <RelativeLayout
+        android:id="@+id/RelativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="23dp"
-        android:layout_marginStart="23dp"
-        android:layout_toEndOf="@+id/RelativeLayout1"
-        android:layout_toRightOf="@+id/RelativeLayout1"
-        android:text="Next" />
+        android:layout_below="@+id/topText"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/topTextView"
+            style="@style/AudioFileInfoOverlayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/uploadImage"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/impact"
+            android:paddingTop="15dp"
+            android:text="Top"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/bottomTextView"
+            style="@style/AudioFileInfoOverlayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/uploadImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:fontFamily="@font/impact"
+            android:paddingBottom="15dp"
+            android:text="Bottom"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/bottomText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/RelativeLayout"
+        android:layout_alignStart="@+id/RelativeLayout"
+        android:layout_below="@+id/RelativeLayout"
+        android:layout_marginTop="9dp"
+        android:ems="10"
+        android:hint="Bottom Text"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/topText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/RelativeLayout"
+        android:layout_alignStart="@+id/RelativeLayout"
+        android:layout_below="@+id/btnNextImage"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Top Text"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btnBackImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
-        android:layout_toLeftOf="@+id/RelativeLayout1"
-        android:layout_toStartOf="@+id/RelativeLayout1"
-        android:text="Back" />
+        android:text="Back"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <Button
+        android:id="@+id/btnNextImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnBackImage"
+        android:layout_alignParentRight="true"
+        android:text="Next"
+        tools:layout_editor_absoluteX="512dp"
+        tools:layout_editor_absoluteY="10dp" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/RelativeLayout1"
-        android:layout_marginBottom="50dp">
-
-
-        <Button
-            android:text="Upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:id="@+id/btnUploadImage"/>
-
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/RelativeLayout1"
-        android:layout_marginTop="10dp"
-        android:id="@+id/RelativeLayout2">
-
-
-
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/uploadImage"/>
-
-        <TextView
-            android:id="@+id/TopTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:layout_alignTop="@+id/uploadImage"
-            android:layout_centerHorizontal="true"
-            android:textColor="#FFFFFF"
-            style="@style/AudioFileInfoOverlayText"
-            android:fontFamily="@font/impact"
-            android:text="Top"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/BottomTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@+id/uploadImage"
-            android:textColor="#FFFFFF"
-            style="@style/AudioFileInfoOverlayText"
-            android:fontFamily="@font/impact"
-            android:text="Bottom"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/TopText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/RelativeLayout2"
-        android:layout_alignStart="@+id/RelativeLayout2"
-        android:layout_above="@+id/RelativeLayout2"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Top Text" />
-
-    <EditText
-        android:id="@+id/BottomText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/TopText"
-        android:layout_alignRight="@+id/TopText"
-        android:layout_below="@id/RelativeLayout2"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Bottom Text" />
-
-
-    <EditText
+        android:id="@+id/UploadLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/BottomText"
-        android:id="@+id/imageName"
-        android:hint="Enter image name"/>
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/bottomText">
 
+        <EditText
+            android:id="@+id/imageName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:hint="Enter image name" />
 
+        <Button
+            android:id="@+id/btnUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="Upload" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

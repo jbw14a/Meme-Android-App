@@ -153,6 +153,8 @@ public class TakePhoto extends AppCompatActivity {
                             toastMessage("Upload Success");
                             mProgressDialog.dismiss();
                             addURL();
+                            Intent intent = new Intent(TakePhoto.this, Home.class);
+                            startActivity(intent);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -278,6 +280,10 @@ public class TakePhoto extends AppCompatActivity {
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         image.setImageBitmap(bitmap);
+
+        // For some reason, on the marshmellow tablets, setting the rotation once to 90 degrees, or any other degree,
+        // would always result in flipping the image upside down. Below works for some reason..
+        image.setRotation(0);
         image.setRotation(90);
     }
 

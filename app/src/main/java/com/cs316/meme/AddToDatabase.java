@@ -90,11 +90,11 @@ public class AddToDatabase extends AppCompatActivity{
         btnUpload = (Button) findViewById(R.id.btnUploadImage);
         imageName = (EditText) findViewById(R.id.imageName);
 
-        topText = (EditText) findViewById(R.id.TopText);
-        bottomText = (EditText) findViewById(R.id.BottomText);
-        topTextView = (TextView) findViewById(R.id.TopTextView);
-        bottomTextView = (TextView) findViewById(R.id.BottomTextView);
-        relativeLayout = (RelativeLayout) findViewById(R.id.RelativeLayout2);
+        topText = (EditText) findViewById(R.id.topText);
+        bottomText = (EditText) findViewById(R.id.bottomText);
+        topTextView = (TextView) findViewById(R.id.topTextView);
+        bottomTextView = (TextView) findViewById(R.id.bottomTextView);
+        relativeLayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
 
 
 
@@ -196,6 +196,8 @@ public class AddToDatabase extends AppCompatActivity{
                             toastMessage("Upload Success");
                             mProgressDialog.dismiss();
                             addURL();
+                            Intent intent = new Intent(AddToDatabase.this, Home.class);
+                            startActivity(intent);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
