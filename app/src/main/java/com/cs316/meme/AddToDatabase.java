@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -17,11 +18,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,6 +60,10 @@ public class AddToDatabase extends AppCompatActivity{
     private ImageView image;
     private EditText imageName;
     private Button btnUpload, btnNext, btnBack;
+    private EditText topText, bottomText;
+    private TextView  topTextView, bottomTextView;
+    private RelativeLayout relativeLayout;
+
     private ProgressDialog mProgressDialog;
 
     private final static int mWidth = 512;
@@ -80,12 +89,20 @@ public class AddToDatabase extends AppCompatActivity{
         btnNext = (Button) findViewById(R.id.btnNextImage);
         btnUpload = (Button) findViewById(R.id.btnUploadImage);
         imageName = (EditText) findViewById(R.id.imageName);
+
+        topText = (EditText) findViewById(R.id.TopText);
+        bottomText = (EditText) findViewById(R.id.BottomText);
+        topTextView = (TextView) findViewById(R.id.TopTextView);
+        bottomTextView = (TextView) findViewById(R.id.BottomTextView);
+        relativeLayout = (RelativeLayout) findViewById(R.id.RelativeLayout2);
+
+
+
         pathArray = new ArrayList<>();
         mProgressDialog = new ProgressDialog(AddToDatabase.this);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        checkFilePermissions();
         addFilePaths();
 
         mAuth = FirebaseAuth.getInstance();
@@ -155,9 +172,23 @@ public class AddToDatabase extends AppCompatActivity{
                 FirebaseUser user = mAuth.getCurrentUser();
                 String userID = user.getUid();
 
+                // Screenshots the image
+                Bitmap viewBmp = Bitmap.createBitmap(relativeLayout.getWidth(), relativeLayout.getHeight(), Bitmap.Config.ARGB_8888);
+                viewBmp.setDensity(relativeLayout.getResources().getDisplayMetrics().densityDpi);
+                Canvas canvas = new Canvas(viewBmp);
+                relativeLayout.draw(canvas);
+                String ImageURL = MediaStore.Images.Media.insertImage(
+                        getContentResolver(),
+                        viewBmp,
+                        "New Photo",
+                        "New Image"
+
+                );
+
+                // Upload Image to firebase
                 String name = imageName.getText().toString();
                 if(!name.equals("")){
-                    Uri uri = Uri.fromFile(new File(pathArray.get(array_position)));
+                    Uri uri = Uri.parse(ImageURL);
                     StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/" + name + ".jpg");
                     storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -178,6 +209,40 @@ public class AddToDatabase extends AppCompatActivity{
                 }
 
 
+            }
+        });
+
+        // Editing text on Image
+        topText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                topTextView.setText(topText.getText());
+            }
+        });
+        bottomText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bottomTextView.setText(bottomText.getText());
             }
         });
     }
@@ -238,19 +303,7 @@ public class AddToDatabase extends AppCompatActivity{
 
     }
 
-    private void checkFilePermissions(){
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
-            int permissionCheck = AddToDatabase.this.checkSelfPermission("Manifest.permission.READ_EXTERNAL_STORAGE");
-            permissionCheck += AddToDatabase.this.checkSelfPermission("Manifest.permission.WRITE_EXTERNAL_STORAGE");
-            if(permissionCheck != 0) {
-                this.requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
 
-        }
-        else{
-            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
-        }
-    }
 
 
 

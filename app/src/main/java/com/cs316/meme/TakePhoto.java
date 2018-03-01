@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,12 +38,14 @@ import com.google.firebase.storage.UploadTask;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class TakePhoto extends AppCompatActivity {
 
 
     private static final String TAG = "TakePhoto";
-    private static final int CAMERA_REQUEST = 123;
+    private static final int CAMERA_REQUEST = 1;
     private ImageView image;
     private Button takePhotoBtn, uploadBtn;
     private EditText imageName, TopText, BottomText;
@@ -50,6 +55,7 @@ public class TakePhoto extends AppCompatActivity {
 
     private Bitmap photo;
     private Uri savedImageURI;
+    private Uri photoURI;
 
     private StorageReference mStorageRef;
 
@@ -58,6 +64,12 @@ public class TakePhoto extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
     private ProgressDialog mProgressDialog;
+
+    private File photoFile = null;
+
+    private String mCurrentPhotoPath;
+
+
 
 
     @Override
@@ -191,10 +203,40 @@ public class TakePhoto extends AppCompatActivity {
 
     }
 
+
+    //creates a file for the image to be stored at
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String imageFileName = "MyFile" + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     // ------ This is used to pull up the phone's camera --------
     public void takePhoto(View v){
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA_REQUEST);
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.d(TAG, "Error while creating file!");
+        }
+        if (photoFile != null) {
+            photoURI = FileProvider.getUriForFile(TakePhoto.this,
+                    "com.cs316.meme",
+                    photoFile);
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoURI); //Tells the camera to store the full size picture in this URI
+            startActivityForResult(intent, 1);
+
+        }
     }
 
     public void clear(View v){
@@ -204,20 +246,39 @@ public class TakePhoto extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
 
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK){
-            photo = (Bitmap) data.getExtras().get("data");
-            String saveImageURL = MediaStore.Images.Media.insertImage(
-                    getContentResolver(),
-                    photo,
-                    "New Photo",
-                    "New Image"
 
-            );
-
-            savedImageURI = Uri.parse(saveImageURL);
-            image.setImageURI(savedImageURI);
+            setPic();
 
         }
 
+
+    }
+
+    //sets the ImageView bitmap with scaled Bitmap.
+    private void setPic(){
+
+        // Get the dimensions of the View
+        int targetW = image.getWidth();
+        int targetH = image.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        image.setImageBitmap(bitmap);
+        image.setRotation(90);
     }
 
     // ---------------------------------------------------------------
